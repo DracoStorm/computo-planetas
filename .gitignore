@@ -121,4 +121,4 @@ dmypy.json
 .idea
 
 #Imágenes generadas con el script de fragmentar gif
-png
+*.png
