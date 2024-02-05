@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def calculate(X, m1, m2):
+def calculate(X: [float], m1: int, m2: int):
     """
-        Cálcula la atracción  gravitaticional de dos cuerpos utilizando ecuaciones diferenciales ordinarias (ODEs) por sus siglas en inglés.
+        Cálcula la atracción  gravitaticional de dos cuerpos utilizando ecuaciones diferenciales ordinarias (ODEs).
 
         Parameters
         ----------
@@ -17,7 +17,7 @@ def calculate(X, m1, m2):
         Returns
         -------
         XP:float[]
-            Arreglo con las pocisiones y velocidades de los astros después de ser derivados.
+            Arreglo con las posiciones y velocidades de los astros después de ser derivados.
     """
     # Constante Gravitacional
     G = 6.672e-11
