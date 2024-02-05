@@ -5,12 +5,8 @@ from astro_physics import astro_init
 
 
 def main():
-    m1, m2 = 5, 5
-    h = 5000e-3  # Paso de integración
-    N = 50000    # Iteraciones
-
-    X = astro_init.init()
-    t, p1, p2 = orbital_trajectory.calculate(X, m1, m2, h, N)
+    X, m1, m2 = astro_init.init()
+    t, p1, p2 = orbital_trajectory.calculate(X, m1, m2, h=5000e-3, N=50000)
     pl.plot_animation(t, p1, p2, N)
 
 

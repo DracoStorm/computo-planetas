@@ -2,16 +2,38 @@ import numpy as np
 
 
 def calculate(X, m1, m2):
-    # ODE dos planetas
-    XP = np.zeros(8)
-    G = 6.672e-11  # constante gravitacional
+    """
+        Cálcula la atracción  gravitaticional de dos cuerpos utilizando ecuaciones diferenciales ordinarias (ODEs) por sus siglas en inglés.
 
+        Parameters
+        ----------
+        X:float[]
+            Arreglo con las pocisiones y velocidades de los astros.
+        m1:int
+            Masa del primer astro.
+        m2:int
+            Masa del segundo astro.
+
+        Returns
+        -------
+        XP:float[]
+            Arreglo con las pocisiones y velocidades de los astros después de ser derivados.
+    """
+    # Constante Gravitacional
+    G = 6.672e-11
+
+    # XP significa 'X Prime' una notación común para el estado derivado del vector 'X'
+    XP = np.zeros(8)
+
+    # Inicializa los valores de las velocidades derivadas
     XP[0:4] = X[4:8]
 
-    # Calculate the distance between the two planets
+    # Calcula la distancia entre los dos astros
+    # La suma del último término es un valor de estabilización numérica
+    # Previene la división de valores extremadamente pequeños y cero
     L = np.sqrt((X[2] - X[0])**2 + (X[3] - X[1])**2) + 1e-9
 
-    # Update the derivative values
+    # Calcula la aceleración de los astros en x,y con las formulas derivadas de la segunda ley de Newton
     XP[4] = (G * m2 * (X[2] - X[0])) / (L**3)
     XP[5] = (G * m2 * (X[3] - X[1])) / (L**3)
     XP[6] = (G * m1 * (X[0] - X[2])) / (L**3)
