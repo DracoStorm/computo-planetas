@@ -7,13 +7,13 @@ PATH_GIF = r"animation/gifs/"
 PATH_FRAME = r"animation/frames/"
 
 
-def desmontar_gif(file):
+def unmount_gif(file: str):
     """
         Desmonta el gif en cada frame que lo contiene y lo deposita en la carpta PATH_FRAMES.
 
             Parameters
             ----------
-                file : string
+                file : str
                     Nombre de un archivo .gif dentro de PATH_GIF.
 
             Exceptions
@@ -44,9 +44,10 @@ def desmontar_gif(file):
 
         print(
             f"Se han desmontado correctamente {len(frames)} frames del gif {file} en la carpeta {PATH_FRAME_GIF}.")
+
     except Exception as e:
         print(f"Error al desmontar el GIF: {e}")
 
 
 # Desmontar el GIF
-desmontar_gif("marte")
+unmount_gif("marte")
