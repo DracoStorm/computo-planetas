@@ -2,10 +2,37 @@ import numpy as np
 
 
 def init():
-    # Condiciones iniciales
-    x1, y1, xp1, yp1 = 0.3817, 0.1538, 5e-06, -5e-06
-    x2, y2, xp2, yp2 = 0.14466, 0.12304, -5e-06, 5e-06
+    """
+        Crea las condiciones iniciales para la simulación de los astros.
 
-    X = np.array([x1, y1, x2, y2, xp1, yp1, xp2, yp2])
+        Returns
+        -------
+            X: float[]
+                Arreglo de los valores de las posiciones y velocidades del par de astros.
 
-    return X
+            astro1_m: int
+                Masa del astro 1.
+
+            astro2_m:int
+                Masa del astro 2.
+
+    """
+
+    # Posciciones en m
+    astro1_x, astro1_y = 0.3817, 0.1538
+    astro2_x, astro2_y = 0.14466, 0.12304
+
+    # Velocidad en sus componentes m/s
+    astro1_vx, astro1_vy = 5e-06, -5e-06
+    astro2_vx, astro2_vy = -5e-06, 5e-06
+
+    # Masas en kg
+    astro1_m = 5
+    astro2_m = 5
+
+    # Arreglo que contiene los datos de las pocisiones y velocidades
+    # El sentido es la búsqueda de cálculos de alto rendimiento
+    X = np.array([astro1_x, astro1_y, astro2_x, astro2_y,
+                 astro1_vx, astro1_vy, astro2_vx, astro2_vy])
+
+    return X, astro1_m, astro2_m
