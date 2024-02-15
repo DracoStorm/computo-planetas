@@ -12,7 +12,7 @@ def main():
     # N es el total de pasos que se dan, determina la duración de la simulación
     t, p1, p2 = orbital_trajectory.calculate(X, m1, m2, h=5000e-3, N=50000)
     # Anima la simulación
-    pl.plot_animation(t, p1, p2, N)
+    pl.plot_animation(t, p1, p2, N=0)
 
 
 if __name__ == "__main__":
