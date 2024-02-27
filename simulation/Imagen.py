@@ -5,7 +5,7 @@ import imageio
 sx = 630 
 sy = 473
 rx = 1
-ry = 1
+ry = 3
 fx = sy / rx
 fy = sy / ry
 
