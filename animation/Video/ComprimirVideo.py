@@ -1,32 +1,28 @@
 import os
 import cv2
-import numpy as np
-from PIL import Image, ImageSequence
 
-# Ruta del archivo de video anterior
-previous_video_path = 'animation/Video/video_comprimido.mp4'
-
-# Eliminar el archivo de video anterior si existe
-if os.path.exists(previous_video_path):
-    os.remove(previous_video_path)
-
-# Abrir el archivo GIF y obtener sus cuadros
-gif_path = 'animacion.gif'
-frames = []
-with Image.open(gif_path) as img:
-    frames = [np.array(frame.convert('RGB')) for frame in ImageSequence.Iterator(img)]
+# Carpeta que contiene las imágenes
+folder_path = 'animation/frames/marte/'
 
 # Especificar el formato de salida y el códec de compresión para formato .mp4
 output_path = 'animation/Video/video_comprimido.mp4'
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Utilizamos el códec MP4V
 fps = 1  # Reducimos la tasa de frames para hacer el video más lento
 
-# Crear el objeto VideoWriter
-video_writer = cv2.VideoWriter(output_path, fourcc, fps, (frames[0].shape[1], frames[0].shape[0]))
+# Obtener la lista de archivos en la carpeta
+image_files = sorted([os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith(('.png', '.jpg', '.jpeg'))])
 
-# Escribir cada frame en el archivo de video
-for frame in frames:
-    video_writer.write(frame)
+# Leer la primera imagen para obtener las dimensiones
+img = cv2.imread(image_files[0])
+height, width, _ = img.shape
+
+# Crear el objeto VideoWriter
+video_writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+# Escribir cada imagen en el archivo de video
+for image_file in image_files:
+    img = cv2.imread(image_file)
+    video_writer.write(img)
 
 # Liberar recursos
 video_writer.release()
