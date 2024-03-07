@@ -14,7 +14,7 @@ def send_file(file_path, server_address):
         client_socket.connect(server_address)
 
         # Enviar el nombre del archivo y su tamaño al servidor
-        file_info = f"{file_name}@{file_size}"
+        file_info = f"{file_name}@{file_size}@"
         client_socket.sendall(file_info.encode('utf-8'))
 
         # Abrir y enviar el contenido del archivo
@@ -37,7 +37,7 @@ def send_file(file_path, server_address):
 server_address = ('172.26.161.66', 12345)  # Cambiar a la dirección IP real del servidor
 
 # Ruta del archivo que deseas enviar
-file_path = 'network/Hola.txt'  # Cambiar a la ruta real del archivo
+file_path = 'network/Hola4.txt'  # Cambiar a la ruta real del archivo
 
 # Llamar a la función para enviar el archivo
 send_file(file_path, server_address)
