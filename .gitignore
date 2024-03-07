@@ -122,9 +122,9 @@ dmypy.json
 
 #Imágenes generadas con el script de fragmentar gif
 *.png
-.jpg
-.jpeg
+*.jpg
+*.jpeg
 
 #Video
-.avi
-.mp3
+*.avi
+*.mp4
