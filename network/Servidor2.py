@@ -8,8 +8,11 @@ def handle_client(client_socket):
         file_info = client_socket.recv(1024).decode('utf-8', errors='replace').split('@')
         print("Información del archivo recibida:", file_info)
 
+
+       # print(file_info[1]) #tamano en bytes
+
         file_name = file_info[0]
-        file_size = int(file_info[1])
+        file_size = int(file_info[1])   # esta linea tiene problemas
 
         print(f"Recibiendo archivo: {file_name}, tamaño: {file_size} bytes")
 
