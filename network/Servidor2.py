@@ -2,7 +2,15 @@ import socket
 import threading
 import os
 
-def handle_client(client_socket):
+# Diccionario de direcciones IP permitidas
+allowed_ips = {
+    '172.26.167.179',  # Ejemplo: localhost
+    # Agrega más direcciones IP permitidas según sea necesario
+    '172.31.6.164',
+    '172.31.12.11'
+}
+
+def handle_client(client_socket, client_address):
     try:
         # Recibir el nombre del archivo y su tamaño
         file_info = client_socket.recv(1024).decode('utf-8', errors='replace').split('@')
@@ -44,9 +52,13 @@ try:
         # Aceptar una conexión
         client_socket, client_address = server_socket.accept()
         print('Conexión aceptada de', client_address)
-
+        
+        # Verificar la dirección IP del cliente
+        if client_address[0] not in allowed_ips:
+            print(f"Intento de conexión desde una dirección IP no permitida: {client_address[0]}")
+            break
         # Crear un hilo para manejar la conexión del cliente
-        client_handler = threading.Thread(target=handle_client, args=(client_socket,))
+        client_handler = threading.Thread(target=handle_client, args=(client_socket, client_address))
         client_handler.start()
 
 except KeyboardInterrupt:
