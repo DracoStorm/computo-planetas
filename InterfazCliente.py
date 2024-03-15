@@ -12,12 +12,12 @@ def enviar_archivo_interfaz():
     # Crear la ventana secundaria para mostrar el progreso de la transferencia
     progreso_window = tk.Toplevel(root)
     progreso_window.title("Progreso de Transferencia")
-    progreso_window.geometry("400x200")
+    progreso_window.geometry("600x200")
     progreso_window.configure(background='#31363F')
 
-    # Etiqueta para mostrar el progreso
-    progreso_label = tk.Label(progreso_window, text="Enviando archivo...")
-    progreso_label.pack()
+    # Etiqueta para mostrar el progreso, centrada y con letra blanca
+    progreso_label = tk.Label(progreso_window, background='#31363F',text="Enviando archivo...", fg='white', font=('Arial', 20))
+    progreso_label.pack(pady=20)
 
     # Llamar a la función para enviar el archivo
     send_file(file_path, server_address)
@@ -33,14 +33,15 @@ root = tk.Tk()
 root.title("Enviar Archivo")
 root.geometry("1000x800")
 root.configure(background='#31363F')
+root.configure(bg='#31363F')
 
-# Etiqueta para mostrar instrucciones
-label = tk.Label(root, text="Seleccione el archivo que desea enviar:")
-label.pack()
+# Etiqueta para mostrar instrucciones, centrada y con letra blanca
+label = tk.Label(root, text="Seleccione el archivo que desea enviar:", background='#31363F', fg='white', font=('Arial', 24))
+label.pack(pady=20)
 
-# Botón para abrir el explorador de archivos
-browse_button = tk.Button(root, text="Examinar Archivo", command=enviar_archivo_interfaz)
-browse_button.pack()
+# Botón para abrir el explorador de archivos, centrado y con letra blanca
+browse_button = tk.Button(root, text="Examinar Archivo", background='#31363F',command=enviar_archivo_interfaz, fg='white', font=('Arial', 16))
+browse_button.pack(pady=20)
 
 # Ejecutar la aplicación
 root.mainloop()
