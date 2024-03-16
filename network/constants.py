@@ -1,6 +1,6 @@
-# prifes para interpretar los componentes
-PREFIX_FILE = b'FILE'
-PREFIX_MSG = b'MSG'
+# Identificadores de tipo de envio de red
+FILE_IDENTIFIER = b'FILE'
+MSG_IDENTIFIER = b'MSG'
 
 # Diccionario de ips según los componentes
 IPS = {
