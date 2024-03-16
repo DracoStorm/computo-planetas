@@ -1,3 +1,7 @@
+# prifes para interpretar los componentes
+PREFIX_FILE = b'FILE'
+PREFIX_MSG = b'MSG'
+
 # Diccionario de ips según los componentes
 IPS = {
     '172.26.167.179',  # ip-Toño
