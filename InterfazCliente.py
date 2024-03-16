@@ -13,7 +13,7 @@ def enviar_archivo_interfaz():
     archivos_enviados.append(file_path.split('/')[-1])
 
     # Dirección IP y puerto del servidor
-    server_address = ('172.26.166.136', 12345)  # Cambiar a la dirección IP real del servidor
+    server_address = ('192.168.1.107', 12345)  # Cambiar a la dirección IP real del servidor
 
     # Crear la ventana secundaria para mostrar el progreso de la transferencia
     progreso_window = tk.Toplevel(root)

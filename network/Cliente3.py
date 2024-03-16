@@ -34,7 +34,7 @@ def send_file(file_path, server_address):
         client_socket.close()
 
 # Dirección IP y puerto del servidor
-server_address = ('172.26.166.136', 12345)  # Cambiar a la dirección IP real del servidor
+server_address = ('192.168.1.107', 12345)  # Cambiar a la dirección IP real del servidor
 
 # Ruta del archivo que deseas enviar
 file_path = 'network/Pruebas.txt'  # Cambiar a la ruta real del archivo
