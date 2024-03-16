@@ -1,5 +1,7 @@
 import socket
+import constants as const
 import os
+
 
 def send_file(file_path, server_address):
     # Obtener el nombre y tamaño del archivo
@@ -10,28 +12,26 @@ def send_file(file_path, server_address):
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
-        # Conectar al servidor
         client_socket.connect(server_address)
+        # Send file information
+        file_info = f"{os.path.basename(file_path)}@{os.path.getsize(file_path)}@"
+        print(file_info)
+        client_socket.sendall(const.FILE_IDENTIFIER + file_info.encode('utf-8'))
 
-        # Enviar el nombre del archivo y su tamaño al servidor
-        file_info = f"{file_name}@{file_size}"
-        client_socket.sendall(file_info.encode('utf-8'))
-
-        # Abrir y enviar el contenido del archivo
+        # Send the file data
         with open(file_path, 'rb') as file:
             data = file.read(1024)
             while data:
                 client_socket.sendall(data)
                 data = file.read(1024)
 
-        print(f"Archivo '{file_name}' enviado con éxito al servidor.")
-
     except Exception as e:
-        print(f"Error durante la transferencia del archivo: {e}")
+        print(f"Error during file transfer: {e}")
 
     finally:
-        # Cerrar la conexión
+        # Close the client connection
         client_socket.close()
+
 
 def send_message(server_address):
     # Crear un socket TCP
@@ -45,7 +45,7 @@ def send_message(server_address):
         message = input("Ingrese el mensaje que desea enviar al servidor: ")
 
         # Enviar el mensaje al servidor
-        client_socket.sendall(message.encode('utf-8'))
+        client_socket.sendall(const.MSG_IDENTIFIER + message.encode('utf-8'))
 
         print("Mensaje enviado con éxito al servidor.")
 
@@ -56,13 +56,16 @@ def send_message(server_address):
         # Cerrar la conexión
         client_socket.close()
 
+
 def main():
     # Dirección IP y puerto del servidor
-    server_address = ('192.168.56.1', 12345)  # Cambiar a la dirección IP real del servidor
+    # Cambiar a la dirección IP real del servidor
+    server_address = ('192.168.56.1', 12345)
 
     while True:
         # Opción para enviar mensaje o archivo
-        option = input("Seleccione una opción (1 para enviar mensaje, 2 para enviar archivo, q para salir): ")
+        option = input(
+            "Seleccione una opción (1 para enviar mensaje, 2 para enviar archivo, q para salir): ")
 
         if option == '1':
             send_message(server_address)
@@ -75,6 +78,7 @@ def main():
             break
         else:
             print("Opción no válida.")
+
 
 if __name__ == "__main__":
     main()
