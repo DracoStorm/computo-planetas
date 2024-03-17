@@ -8,15 +8,12 @@ def send_file(file_path, server_address):
     file_name = os.path.basename(file_path)
     file_size = os.path.getsize(file_path)
 
-    # Crear un socket TCP
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     try:
-        client_socket.connect(server_address)
+
         # Send file information
-        file_info = f"{os.path.basename(file_path)}@{os.path.getsize(file_path)}@"
-        print(file_info)
-        client_socket.sendall(const.FILE_IDENTIFIER + file_info.encode('utf-8'))
+        file_info = f"{file_name}@{file_size}@"
+        client_socket.sendall(const.FILE_IDENTIFIER +
+                              file_info.encode('utf-8'))
 
         # Send the file data
         with open(file_path, 'rb') as file:
@@ -28,18 +25,10 @@ def send_file(file_path, server_address):
     except Exception as e:
         print(f"Error during file transfer: {e}")
 
-    finally:
-        # Close the client connection
-        client_socket.close()
-
 
 def send_message(server_address):
-    # Crear un socket TCP
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
-        # Conectar al servidor
-        client_socket.connect(server_address)
 
         # Solicitar al usuario que ingrese el mensaje
         message = input("Ingrese el mensaje que desea enviar al servidor: ")
@@ -52,16 +41,17 @@ def send_message(server_address):
     except Exception as e:
         print(f"Error durante el envío del mensaje: {e}")
 
-    finally:
-        # Cerrar la conexión
-        client_socket.close()
 
-
-def main():
+if __name__ == "__main__":
     # Dirección IP y puerto del servidor
     # Cambiar a la dirección IP real del servidor
     server_address = ('192.168.56.1', 12345)
 
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+    # Conectar al servidor
+    client_socket.connect(server_address)
     while True:
         # Opción para enviar mensaje o archivo
         option = input(
@@ -78,7 +68,3 @@ def main():
             break
         else:
             print("Opción no válida.")
-
-
-if __name__ == "__main__":
-    main()
