@@ -7,7 +7,8 @@ allowed_ips = {
     '172.26.167.179',  # Ejemplo: localhost
     # Agrega más direcciones IP permitidas según sea necesario
     '172.31.6.164',
-    '172.31.12.11'
+    '172.31.12.11',
+    '192.168.1.107'
 }
 
 def handle_client(client_socket, client_address):
