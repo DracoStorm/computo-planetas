@@ -3,7 +3,7 @@ import constants as const
 import exchange as net
 
 
-if __name__ == "__main__":
+def main() -> None:
     # Dirección IP y puerto del servidor
     # Cambiar a la dirección IP real del servidor
     server_address = (const.SERVER_IP, const.SERVER_PORT)
@@ -29,3 +29,7 @@ if __name__ == "__main__":
             break
         else:
             print("Opción no válida.")
+
+
+if __name__ == "__main__":
+    main()
