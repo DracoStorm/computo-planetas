@@ -3,11 +3,12 @@ import threading
 import exchange as net
 import constants as const
 
-if __name__ == '__main__':
+
+def main() -> None:
     # Crear un socket TCP
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Cambiar a la dirección IP real del servidor
-    server_address = ('192.168.100.21', 22333)
+    server_address = (const.SERVER_IP, const.SERVER_PORT)
     server_socket.bind(server_address)
     server_socket.listen(5)  # Permitir hasta 5 conexiones pendientes
 
@@ -36,3 +37,7 @@ if __name__ == '__main__':
     finally:
         # Cerrar el socket del servidor
         server_socket.close()
+
+
+if __name__ == '__main__':
+    main()

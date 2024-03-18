@@ -1,11 +1,12 @@
 import socket
+import constants as const
 import exchange as net
 
 
 if __name__ == "__main__":
     # Dirección IP y puerto del servidor
     # Cambiar a la dirección IP real del servidor
-    server_address = ('192.168.100.21', 22333)
+    server_address = (const.SERVER_IP, const.SERVER_PORT)
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
