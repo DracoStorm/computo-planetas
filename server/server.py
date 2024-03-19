@@ -1,7 +1,9 @@
 import socket
 import threading
 import network.constants as const
-import network.functions as net
+import comp_threads.compute as compute_thread
+import comp_threads.frames as frames_thread
+import comp_threads.gen_frame as genframe_thread
 
 
 def main() -> None:
@@ -26,10 +28,18 @@ def main() -> None:
                     f"Intento de conexión desde una dirección IP no permitida: {client_address[0]}")
                 break
 
-            # Crear un hilo para manejar la conexión del cliente
-            client_handler = threading.Thread(
-                target=net.handle_client, args=(client_socket,))
-            client_handler.start()
+            if client_address[0] == const.IPS[0]:
+                comp_compute_traj = threading.Thread(
+                    target=compute_thread.handle_client, name='component compute trajectory', args=(client_socket,))
+                comp_compute_traj.start()
+            if client_address[0] == const.IPS[0]:
+                comp_compute_traj = threading.Thread(
+                    target=frames_thread.handle_client, name='component frames', args=(client_socket,))
+                comp_compute_traj.start()
+            if client_address[0] == const.IPS[0]:
+                comp_compute_traj = threading.Thread(
+                    target=genframe_thread.handle_client, name='component generate frame', args=(client_socket,))
+                comp_compute_traj.start()
 
     except KeyboardInterrupt:
         print("Servidor cerrado manualmente.")

@@ -1,29 +1,35 @@
-def handle_client(client_socket, client_address):
-    try:
-        # Recibir el nombre del archivo y su tamaño
-        file_info = client_socket.recv(1024).decode(
-            'utf-8', errors='replace').split('@')
-        print("Información del archivo recibida:", file_info)
+import socket
+import network.constants as const
+import network.functions as net
 
-        file_name = file_info[0]
-        file_size = int(file_info[1])
 
-        print(f"Recibiendo archivo: {file_name}, tamaño: {file_size} bytes")
+def main() -> None:
+    # Dirección IP y puerto del servidor
+    # Cambiar a la dirección IP real del servidor
+    server_address = (const.SERVER_IP, const.SERVER_PORT)
 
-        # Abrir un archivo para escribir los datos recibidos
-        with open(file_name, 'wb') as file:
-            # Recibir y escribir los datos en el archivo
-            received_data = 0
-            while received_data < file_size:
-                data = client_socket.recv(1024)
-                file.write(data)
-                received_data += len(data)
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        print("Archivo recibido con éxito.")
+    # Conectar al servidor
+    client_socket.connect(server_address)
+    while True:
+        # Opción para enviar mensaje o archivo
+        option = input(
+            "Seleccione una opción (1 para enviar mensaje, 2 para enviar archivo, q para salir): ")
 
-    except Exception as e:
-        print(f"Error durante la transferencia del archivo: {e}")
+        if option == '1':
+            net.send_message(client_socket)
+        elif option == '2':
+            # Ruta del archivo que deseas enviar
+            file_path = input("Ingrese la ruta del archivo que desea enviar: ")
+            net.send_file(client_socket, file_path)
+        elif option.lower() == 'q':
+            print("Saliendo del programa.")
+            break
+        else:
+            print("Opción no válida.")
 
-    finally:
-        # Cerrar la conexión del cliente
-        client_socket.close()
+
+if __name__ == "__main__":
+    main()
