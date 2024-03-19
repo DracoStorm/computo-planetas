@@ -1,6 +1,6 @@
 import socket
 import constants as const
-import exchange as net
+import network.functions as net
 
 
 def main() -> None:
