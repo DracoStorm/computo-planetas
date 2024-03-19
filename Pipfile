@@ -8,6 +8,7 @@ matplotlib = "*"
 numpy = "*"
 pyqt6 = "*"
 imageio = "*"
+opencv-python-headless = "*"
 
 [dev-packages]
 
