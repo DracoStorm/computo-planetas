@@ -128,3 +128,6 @@ dmypy.json
 #Video
 *.avi
 *.mp4
+
+#others
+*.txt
