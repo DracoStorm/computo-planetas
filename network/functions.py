@@ -70,3 +70,28 @@ def send_message(client_socket):
 
     except Exception as e:
         print(f"Error durante el envío del mensaje: {e}")
+
+
+def handle_client(client_socket):
+    try:
+        while True:
+            data = client_socket.recv(1024)
+
+            if not data:
+                break  # No more data, close the connection
+
+            if data.startswith(const.FILE_IDENTIFIER):
+                print("Message")
+                recive_file(client_socket, data)
+
+            elif data.startswith(const.MSG_IDENTIFIER):
+                recive_message(data)
+            else:
+                print("Unknown data type.")
+
+    except Exception as e:
+        print(f"Error during data transfer: {e}")
+
+    finally:
+        # Close the client connection
+        client_socket.close()
