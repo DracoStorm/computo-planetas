@@ -1,7 +1,7 @@
 import socket
 import threading
-from network import constants as const
-from network import functions as net
+import network.constants as const
+import network.functions as net
 
 
 def main() -> None:
