@@ -10,7 +10,7 @@ def update_plot(frame, p1, p2, line1, line2, scatter1, scatter2):
     return line1, line2, scatter1, scatter2
 
 
-def plot_animation(t, p1, p2, N):
+def plot_animation(p1, p2, N):
     fig, ax = plt.subplots()
     line1, = ax.plot(p1[0], p2[0], 'k', label='trajectory_planet_1')
     line2, = ax.plot(p1[0], p2[0], 'b', label='trajectory_planet_2')
