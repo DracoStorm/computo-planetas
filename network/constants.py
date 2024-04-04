@@ -3,6 +3,7 @@ FILE_IDENTIFIER = b'FILE'
 MSG_IDENTIFIER = b'MSG'
 ERR_IDENTIFIER = b'ERR'
 SHUTDOWN_IDENTIFIER = b'STDN'
+OK_IDENTIFIER = b'OK'
 
 # Lista de ips según los componentes
 IPS = [
