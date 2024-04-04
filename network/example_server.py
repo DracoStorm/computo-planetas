@@ -1,6 +1,6 @@
 import socket
 import threading
-import network.functions as net
+import functions as net
 from constants import *
 
 
