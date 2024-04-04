@@ -1,9 +1,8 @@
 import socket
 import threading
 from network.constants import *
-import server.comp_threads.compute_traj as compute_thread
-import comp_threads.frames as frames_thread
-import comp_threads.gen_frame as genframe_thread
+from comp_threads import compute_traj as compute_thread
+from comp_threads import frames as frames_thread
 
 
 def main() -> None:
@@ -14,7 +13,7 @@ def main() -> None:
     server_socket.bind(server_address)
     server_socket.listen(5)  # Permitir hasta 5 conexiones pendientes
     barrier = threading.Barrier(2)
-    coords: str
+    coords: str=''
     lock = threading.Lock()
     print('Esperando conexiones...')
 
