@@ -15,6 +15,7 @@ def main():
 
     # Conectar al servidor
     client_socket.connect(server_address)
+    print(f'conected to server in {server_address}')
     # Obtiene las condiciones iniciales
     X, m1, m2 = astro_init.init()
     # Calcula la trayectoria con las condiciones iniciales
@@ -25,17 +26,23 @@ def main():
         X = orbital_trajectory.calculate(X, m1, m2, h=5)
         p1: tuple[float, float] = (X[0], X[1])
         p2: tuple[float, float] = (X[2], X[3])
-        print(f"{p1=}\n {p2=}")
+        print(str(p1)+','+str(p2))
         try:
-            net.send_message(client_socket, str(p1, p2))
-        except:
+            net.send_message(client_socket, str(p1)+','+str(p2))
+        except Exception as e:
             net.send_error()
             client_socket.close()
             break
-        msg = net.recive_message(client_socket)
+        msg = net.receive_message(client_socket)
         if (msg.startswith(SHUTDOWN_IDENTIFIER)):
             # actualizar UI
             socket.close()
             break
         elif (msg.startswith(OK_IDENTIFIER)):
             continue
+        else:
+            #actualizar ui
+            raise 'unknown type'
+
+if __name__ == "__main__":
+    main()
