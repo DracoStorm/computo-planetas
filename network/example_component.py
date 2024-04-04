@@ -19,7 +19,9 @@ def main() -> None:
             "Seleccione una opción (1 para enviar mensaje, 2 para enviar archivo, q para salir): ")
 
         if option == '1':
-            net.send_message(client_socket)
+            MSG_path = input("Ingrese el mensaje que desea enviar: ")
+            net.send_message(client_socket, MSG_path)
+
         elif option == '2':
             # Ruta del archivo que deseas enviar
             file_path = input("Ingrese la ruta del archivo que desea enviar: ")
