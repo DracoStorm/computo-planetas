@@ -1,9 +1,10 @@
 import os
 from socket import socket
-from constants import *
+from .constants import *
 
 
-def receive_file(client_socket: socket, initial_data: bytes) -> None:
+def receive_file(client_socket: socket) -> None:
+    initial_data =client_socket.recv(1024)
     file_info = initial_data[len(FILE_IDENTIFIER):].decode(
         'utf-8', errors='replace').split('@')
     print("File information received:", file_info)
@@ -24,7 +25,8 @@ def receive_file(client_socket: socket, initial_data: bytes) -> None:
     print(f"File size: {os.path.getsize(file_name)} bytes")
 
 
-def receive_file_info(client_socket: socket, initial_data: bytes) -> tuple[str, int, bytes]:
+def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
+    initial_data =client_socket.recv(1024)
     file_info = initial_data[len(FILE_IDENTIFIER):].decode(
         'utf-8', errors='replace').split('@')
     file_name = file_info[0]
@@ -40,7 +42,8 @@ def receive_file_info(client_socket: socket, initial_data: bytes) -> tuple[str, 
     return file_name, file_size, bytes(file_data)
 
 
-def receive_message(initial_data: bytes) -> str:
+def receive_message(client_socket:socket) -> str:
+    initial_data =client_socket.recv(1024)
     message = str(initial_data[len(MSG_IDENTIFIER):].decode(
         'utf-8', errors='replace'))
     print(f"Message received. Size: {len(message.encode('utf-8'))} bytes")
