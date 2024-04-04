@@ -1,12 +1,12 @@
 import socket
-import constants as const
-import network.functions as net
+from constants import *
+import functions as net
 
 
 def main() -> None:
     # Dirección IP y puerto del servidor
     # Cambiar a la dirección IP real del servidor
-    server_address = (const.SERVER_IP, const.SERVER_PORT)
+    server_address = (SERVER_IP, SERVER_PORT)
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

@@ -11,5 +11,5 @@ IPS = [
 ]
 
 # Definir el servidor y el puerto
-SERVER_IP = '0.0.0.0'
+SERVER_IP = '192.168.100.21'
 SERVER_PORT = 22333

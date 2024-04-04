@@ -1,10 +1,10 @@
 import os
-import constants as const
+from constants import *
 
 
 def recive_file(client_socket, initial_data):
     try:
-        file_info = initial_data[len(const.FILE_IDENTIFIER):].decode(
+        file_info = initial_data[len(FILE_IDENTIFIER):].decode(
             'utf-8', errors='replace').split('@')
         print("File information received:", file_info)
 
@@ -27,7 +27,7 @@ def recive_file(client_socket, initial_data):
 
 def recive_message(initial_data):
     try:
-        message = initial_data[len(const.MSG_IDENTIFIER):].decode(
+        message = initial_data[len(MSG_IDENTIFIER):].decode(
             'utf-8', errors='replace')
         print("Message received:", message)
     except Exception as e:
@@ -43,7 +43,7 @@ def send_file(client_socket, file_path):
 
         # Send file information
         file_info = f"{file_name}@{file_size}@"
-        client_socket.sendall(const.FILE_IDENTIFIER +
+        client_socket.sendall(FILE_IDENTIFIER +
                               file_info.encode('utf-8'))
 
         # Send the file data
@@ -64,7 +64,7 @@ def send_message(client_socket):
         message = input("Ingrese el mensaje que desea enviar al servidor: ")
 
         # Enviar el mensaje al servidor
-        client_socket.sendall(const.MSG_IDENTIFIER + message.encode('utf-8'))
+        client_socket.sendall(MSG_IDENTIFIER + message.encode('utf-8'))
 
         print("Mensaje enviado con éxito al servidor.")
 
@@ -80,11 +80,11 @@ def handle_client(client_socket):
             if not data:
                 break  # No more data, close the connection
 
-            if data.startswith(const.FILE_IDENTIFIER):
+            if data.startswith(FILE_IDENTIFIER):
                 print("Message")
                 recive_file(client_socket, data)
 
-            elif data.startswith(const.MSG_IDENTIFIER):
+            elif data.startswith(MSG_IDENTIFIER):
                 recive_message(data)
             else:
                 print("Unknown data type.")

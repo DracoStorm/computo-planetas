@@ -1,14 +1,14 @@
 import socket
 import threading
 import network.functions as net
-import constants as const
+from constants import *
 
 
 def main() -> None:
     # Crear un socket TCP
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Cambiar a la dirección IP real del servidor
-    server_address = (const.SERVER_IP, const.SERVER_PORT)
+    server_address = (SERVER_IP, SERVER_PORT)
     server_socket.bind(server_address)
     server_socket.listen(5)  # Permitir hasta 5 conexiones pendientes
 
@@ -21,7 +21,7 @@ def main() -> None:
             print('Conexión aceptada de', client_address)
 
             # Verificar la dirección IP del cliente
-            if client_address[0] not in const.IPS:
+            if client_address[0] not in IPS:
                 print(
                     f"Intento de conexión desde una dirección IP no permitida: {client_address[0]}")
                 break
