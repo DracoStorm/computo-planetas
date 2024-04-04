@@ -1,6 +1,8 @@
 # Identificadores de tipo de envio de red
 FILE_IDENTIFIER = b'FILE'
 MSG_IDENTIFIER = b'MSG'
+ERR_IDENTIFIER = b'ERR'
+SHUTDOWN_IDENTIFIER = b'STDN'
 
 # Lista de ips según los componentes
 IPS = [

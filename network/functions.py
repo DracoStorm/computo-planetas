@@ -1,8 +1,9 @@
 import os
+from socket import socket
 from constants import *
 
 
-def recive_file(client_socket, initial_data):
+def recive_file(client_socket: socket, initial_data: bytes) -> None:
     try:
         file_info = initial_data[len(FILE_IDENTIFIER):].decode(
             'utf-8', errors='replace').split('@')
@@ -25,13 +26,34 @@ def recive_file(client_socket, initial_data):
         print(f"Error during file transfer: {e}")
 
 
-def recive_message(initial_data):
+def recive_file(client_socket: socket, initial_data: bytes) -> tuple[str, int, bytes]:
     try:
-        message = initial_data[len(MSG_IDENTIFIER):].decode(
-            'utf-8', errors='replace')
-        print("Message received:", message)
+        file_info: str = initial_data[len(FILE_IDENTIFIER):].decode(
+            'utf-8', errors='replace').split('@')
+
+        # Initialize an empty bytearray to store the file data
+        file_data: bytearray = bytearray()
+
+        while True:
+            data_chunk: bytes = client_socket.recv(1024)
+            if not data_chunk:
+                break  # No more data, end the loop
+            file_data.extend(data_chunk)
+    except Exception as e:
+        print(f"Error during file transfer: {e}")
+    else:
+        # return the file name, file size, file in bytes
+        return file_info[0], int(file_info[1]), bytes(file_data)
+
+
+def recive_message(initial_data: bytes) -> str:
+    try:
+        message = str(initial_data[len(MSG_IDENTIFIER):].decode(
+            'utf-8', errors='replace'))
     except Exception as e:
         print(f"Error during message transfer: {e}")
+    else:
+        return message
 
 
 def send_file(client_socket, file_path):
@@ -57,17 +79,26 @@ def send_file(client_socket, file_path):
         print(f"Error during file transfer: {e}")
 
 
-def send_message(client_socket):
-
+def send_message(client_socket: socket, message: str) -> None:
     try:
-        # Solicitar al usuario que ingrese el mensaje
-        message = input("Ingrese el mensaje que desea enviar al servidor: ")
-
         # Enviar el mensaje al servidor
         client_socket.sendall(MSG_IDENTIFIER + message.encode('utf-8'))
+    except Exception as e:
+        print(f"Error durante el envío del mensaje: {e}")
 
-        print("Mensaje enviado con éxito al servidor.")
 
+def send_error(client_socket: socket, error: str) -> None:
+    try:
+        # Enviar el mensaje al servidor
+        client_socket.sendall(ERR_IDENTIFIER + error.encode('utf-8'))
+    except Exception as e:
+        print(f"Error durante el envío del mensaje: {e}")
+
+
+def send_shutdown(client_socket: socket) -> None:
+    try:
+        # Enviar el mensaje al servidor
+        client_socket.sendall(SHUTDOWN_IDENTIFIER)
     except Exception as e:
         print(f"Error durante el envío del mensaje: {e}")
 
