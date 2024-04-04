@@ -62,7 +62,6 @@ def send_file(client_socket, file_path):
     file_size = os.path.getsize(file_path)
 
     try:
-
         # Send file information
         file_info = f"{file_name}@{file_size}@"
         client_socket.sendall(FILE_IDENTIFIER +
@@ -74,7 +73,19 @@ def send_file(client_socket, file_path):
             while data:
                 client_socket.sendall(data)
                 data = file.read(1024)
+    except Exception as e:
+        print(f"Error during file transfer: {e}")
 
+
+def send_file(client_socket: socket, file_info: tuple[str, int], file: bytes):
+    try:
+        # Send file information
+        file_info = f"{file_info[0]}@{str(file_info[1])}@"
+        client_socket.sendall(FILE_IDENTIFIER + file_info.encode('utf-8'))
+    except Exception as e:
+        print(f"Error during file transfer: {e}")
+    try:
+        client_socket.sendall(file)
     except Exception as e:
         print(f"Error during file transfer: {e}")
 

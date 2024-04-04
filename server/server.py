@@ -1,7 +1,7 @@
 import socket
 import threading
 import network.constants as const
-import comp_threads.compute as compute_thread
+import server.comp_threads.compute_traj as compute_thread
 import comp_threads.frames as frames_thread
 import comp_threads.gen_frame as genframe_thread
 
