@@ -1,8 +1,8 @@
 import numpy as np
 from PIL import Image
 
-sx = 630 
-sy = 473
+sx = 473 
+sy = 316
 rx = 1
 ry = 3
 fx = sy / rx
@@ -20,22 +20,23 @@ a = np.zeros((sx, sy))
 # Abre la imagen principal
 imagen_principal = Image.open(r"components\gen_frame\Fondo.jpeg")
 
-# Itera sobre los frames del 0 al 9
-for i in range(10):
+# Lista para almacenar las imágenes superpuestas
+imagenes_superpuestas = []
+
+# Itera sobre un rango de 5000
+for i in range(5000):
     # Abre la imagen del frame actual
-    ruta_frame = fr"animation\frames\marte\frame_{i}.png"
+    ruta_frame = fr"animation\frames\marte\frame_{i % 10}.png"  # Usa el módulo para repetir las imágenes del 0 al 9
     imagen_superpuesta = Image.open(ruta_frame)
 
     # Superpone la imagen sobre la imagen principal
     imagen_resultante = imagen_principal.copy()
     imagen_resultante.paste(imagen_superpuesta, (px, py), imagen_superpuesta)
     
-    # Guarda la imagen superpuesta en un archivo
-    nombre_archivo = f"imagen_superpuesta_{i}.png"
-    imagen_resultante.save(nombre_archivo)
+    # Convierte la imagen resultante a una matriz numpy y agrega a la lista
+    imagenes_superpuestas.append(np.array(imagen_resultante))
 
     # Cierra la imagen del frame actual
     imagen_superpuesta.close()
 
-# Cierra la imagen principal
 imagen_principal.close()
