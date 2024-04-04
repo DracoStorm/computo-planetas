@@ -52,6 +52,7 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
         else:
             net.send_shutdown()
             raise 'Can\'t adquire the lock'
+        barrier.wait()
 
 
 if __name__ == "__main__":
