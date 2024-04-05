@@ -44,10 +44,6 @@ def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
 
 def receive_message(client_socket: socket) -> str | bytes:
     initial_data = client_socket.recv(1024)
-    while True:
-        if not initial_data:
-            break
-        initial_data += client_socket.recv(1024)
 
     if initial_data != MSG_IDENTIFIER:
         return initial_data
