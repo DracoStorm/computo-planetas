@@ -45,7 +45,7 @@ def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
 def receive_message(client_socket: socket) -> str | bytes:
     initial_data = client_socket.recv(1024)
 
-    if initial_data != MSG_IDENTIFIER:
+    if not initial_data.startswith(MSG_IDENTIFIER):
         return initial_data
 
     message = str(initial_data[len(MSG_IDENTIFIER):].decode(
