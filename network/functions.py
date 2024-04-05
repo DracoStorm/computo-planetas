@@ -1,32 +1,20 @@
 import os
 from socket import socket
-from constants import *
+from .constants import *
+from .exceptions import *
 
 
-def receive_file(client_socket: socket, initial_data: bytes) -> None:
-    file_info = initial_data[len(FILE_IDENTIFIER):].decode(
-        'utf-8', errors='replace').split('@')
-    print("File information received:", file_info)
+def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
+    data = client_socket.recv(1024)
 
-    file_name = file_info[0]
-    file_size = int(file_info[1])
+    if (data == ERR_IDENTIFIER):
+        raise ComponentError
+    if (data == SHUTDOWN_IDENTIFIER):
+        raise UnexpectedShutdown
+    if (data.startswith(MSG_IDENTIFIER)):
+        raise BadNetType
 
-    print(f"Receiving file: {file_name}, size: {file_size} bytes")
-
-    with open(file_name, 'wb') as file:
-        received_data = 0
-        while received_data < file_size:
-            file_data = client_socket.recv(1024)
-            file.write(file_data)
-            received_data += len(file_data)
-
-    print("File received successfully.")
-    print(f"File size: {os.path.getsize(file_name)} bytes")
-
-
-def receive_file_info(client_socket: socket, initial_data: bytes) -> tuple[str, int, bytes]:
-    file_info = initial_data[len(FILE_IDENTIFIER):].decode(
-        'utf-8', errors='replace').split('@')
+    file_info = data[len(FILE_IDENTIFIER):].decode(errors='replace').split('@')
     file_name = file_info[0]
     file_size = int(file_info[1])
 
@@ -40,40 +28,50 @@ def receive_file_info(client_socket: socket, initial_data: bytes) -> tuple[str, 
     return file_name, file_size, bytes(file_data)
 
 
-def receive_message(initial_data: bytes) -> str:
-    message = str(initial_data[len(MSG_IDENTIFIER):].decode(
-        'utf-8', errors='replace'))
-    print(f"Message received. Size: {len(message.encode('utf-8'))} bytes")
-    return message
+def receive_message(client_socket: socket) -> str:
+    msg = client_socket.recv(1024)
+
+    if (msg == ERR_IDENTIFIER):
+        raise ComponentError
+    if (msg == SHUTDOWN_IDENTIFIER):
+        raise UnexpectedShutdown
+    if (msg.startswith(FILE_IDENTIFIER)):
+        raise BadNetType
+
+    msg = str(msg[len(MSG_IDENTIFIER):].decode(errors='replace'))
+    return msg
 
 
-def send_file(client_socket: socket, file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    file_size = os.path.getsize(file_path)
+def recieve_status(client_socket: socket) -> bytes:
+    status = client_socket.recv(1024)
 
-    file_info = f"{file_name}@{file_size}@"
-    client_socket.sendall(FILE_IDENTIFIER + file_info.encode('utf-8'))
+    if (status == ERR_IDENTIFIER):
+        raise ComponentError
+    if (status.startswith(FILE_IDENTIFIER) or status.startswith(MSG_IDENTIFIER)):
+        raise BadNetType
 
-    with open(file_path, 'rb') as file:
-        data = file.read(1024)
-        while data:
-            client_socket.sendall(data)
-            data = file.read(1024)
+    return status
 
-    print(f"File sent. Size: {file_size} bytes")
+
+def send_file(client_socket: socket, file_name: str, file: bytes) -> None:
+    client_socket.sendall(FILE_IDENTIFIER+file_name.encode()+len(file))
+    client_socket.sendall(file)
 
 
 def send_message(client_socket: socket, message: str) -> None:
-    client_socket.sendall(MSG_IDENTIFIER + message.encode('utf-8'))
-    print(f"Message sent. Size: {len(message.encode('utf-8'))} bytes")
+    client_socket.sendall(MSG_IDENTIFIER + message.encode())
 
 
-def send_error(client_socket: socket, error: str) -> None:
-    client_socket.sendall(ERR_IDENTIFIER + error.encode('utf-8'))
+def send_error(client_socket: socket) -> None:
+    client_socket.sendall(ERR_IDENTIFIER)
 
 
 def send_shutdown(client_socket: socket) -> None:
     client_socket.sendall(SHUTDOWN_IDENTIFIER)
+
+
+def send_ok(client_socket: socket) -> None:
+    client_socket.sendall(OK_IDENTIFIER)
 
 
 def handle_client(client_socket: socket) -> None:
@@ -85,7 +83,7 @@ def handle_client(client_socket: socket) -> None:
 
         if data.startswith(FILE_IDENTIFIER):
             print("File")
-            receive_file(client_socket, data)
+            receive_file(client_socket)
         elif data.startswith(MSG_IDENTIFIER):
             print("Message")
             receive_message(data)
