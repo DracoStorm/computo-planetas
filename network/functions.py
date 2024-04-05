@@ -42,12 +42,16 @@ def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
     return file_name, file_size, bytes(file_data)
 
 
-def receive_message(client_socket: socket) -> str:
+def receive_message(client_socket: socket) -> str | bytes:
     initial_data = client_socket.recv(1024)
     while True:
         if not initial_data:
             break
         initial_data += client_socket.recv(1024)
+
+    if initial_data != MSG_IDENTIFIER:
+        return initial_data
+
     message = str(initial_data[len(MSG_IDENTIFIER):].decode(
         'utf-8', errors='replace'))
     print(f"Message received. Size: {len(message.encode('utf-8'))} bytes")
