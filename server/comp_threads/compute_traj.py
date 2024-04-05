@@ -1,44 +1,46 @@
 import socket
 from threading import Barrier, Lock
 from network.constants import *
+from network.exceptions import *
 import network.functions as net
 
 
-def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock) -> None:
+def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock, iterations: int) -> None:
 
     coordinates: str
-    while True:
+    for _ in range(iterations):
         try:
 
             coordinates = net.receive_message(client_socket)
 
-        except 'Component Error' as e:
+        except ComponentError:
             # actualizar UI
-            net.send_shutdown()
             client_socket.close()
             barrier.abort()
-        except 'Incorrect Data Type' as e:
+        except BadNetType:
             # actualizar UI
-            net.send_shutdown()
-            client_socket.close()
-            barrier.abort()
-        except 'Unknown Data Type' as e:
-            # actualizar UI
-            net.send_shutdown()
+            net.send_shutdown(client_socket)
             client_socket.close()
             barrier.abort()
         except Exception as e:
-            # end UI
-            net.send_shutdown()
+            # actualizar ui
+            net.send_shutdown(client_socket)
             client_socket.close()
             print(f"Error during data transfer: {e}")
             raise
         else:
-            print(coordinates)
+            print(f'Step: {_} current {coordinates=}')
             # barrier.wait()
 
         coords = coordinates
+        # barrier.wait()
+        if _ + 1 == iterations:
+            break
         net.send_ok(client_socket)
+
+    net.send_shutdown(client_socket)
+    client_socket.close()
+    print('Component: Compute_trajectory :: finalized succesfully')
 
 
 if __name__ == "__main__":
