@@ -6,6 +6,9 @@ from astro_physics import astro_init
 from network.constants import *
 from network import functions as net
 
+class UnknowType(Exception):
+    "Raised when the input value is unkown"
+    pass
 
 def main():
     server_address = (SERVER_IP, SERVER_PORT)
@@ -34,15 +37,17 @@ def main():
             client_socket.close()
             break
         msg = net.receive_message(client_socket)
-        if (msg.startswith(SHUTDOWN_IDENTIFIER)):
+        print(f'msg: {msg}')
+        if (msg == SHUTDOWN_IDENTIFIER):
             # actualizar UI
             socket.close()
             break
-        elif (msg.startswith(OK_IDENTIFIER)):
+        elif (msg == OK_IDENTIFIER):
+            print(f'paso {_}')
             continue
         else:
             #actualizar ui
-            raise 'unknown type'
+            raise UnknowType
 
 if __name__ == "__main__":
     main()
