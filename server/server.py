@@ -13,7 +13,8 @@ def main() -> None:
     server_socket.bind(server_address)
     server_socket.listen(5)  # Permitir hasta 5 conexiones pendientes
     barrier = threading.Barrier(2)
-    coords: str=''
+    coords: str = ''
+    iterations: int = 10
     lock = threading.Lock()
     print('Esperando conexiones...')
 
@@ -31,7 +32,7 @@ def main() -> None:
 
             if client_address[0] == IPS[0]:
                 comp_compute_traj = threading.Thread(
-                    target=compute_thread.main, name='component compute trajectory', args=(client_socket, barrier, coords, lock))
+                    target=compute_thread.main, name='component compute trajectory', args=(client_socket, barrier, coords, lock, iterations))
                 comp_compute_traj.start()
             if client_address[0] == IPS[1]:
                 comp_compute_traj = threading.Thread(
