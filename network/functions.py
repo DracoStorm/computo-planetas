@@ -4,7 +4,7 @@ from .constants import *
 
 
 def receive_file(client_socket: socket) -> None:
-    initial_data =client_socket.recv(1024)
+    initial_data = client_socket.recv(1024)
     file_info = initial_data[len(FILE_IDENTIFIER):].decode(
         'utf-8', errors='replace').split('@')
     print("File information received:", file_info)
@@ -26,7 +26,7 @@ def receive_file(client_socket: socket) -> None:
 
 
 def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
-    initial_data =client_socket.recv(1024)
+    initial_data = client_socket.recv(1024)
     file_info = initial_data[len(FILE_IDENTIFIER):].decode(
         'utf-8', errors='replace').split('@')
     file_name = file_info[0]
@@ -42,8 +42,12 @@ def receive_file_info(client_socket: socket) -> tuple[str, int, bytes]:
     return file_name, file_size, bytes(file_data)
 
 
-def receive_message(client_socket:socket) -> str:
-    initial_data =client_socket.recv(1024)
+def receive_message(client_socket: socket) -> str:
+    initial_data = client_socket.recv(1024)
+    while True:
+        if not initial_data:
+            break
+        initial_data += client_socket.recv(1024)
     message = str(initial_data[len(MSG_IDENTIFIER):].decode(
         'utf-8', errors='replace'))
     print(f"Message received. Size: {len(message.encode('utf-8'))} bytes")
@@ -77,6 +81,10 @@ def send_error(client_socket: socket, error: str) -> None:
 
 def send_shutdown(client_socket: socket) -> None:
     client_socket.sendall(SHUTDOWN_IDENTIFIER)
+
+
+def send_ok(client_socket: socket) -> None:
+    client_socket.sendall(OK_IDENTIFIER)
 
 
 def handle_client(client_socket: socket) -> None:

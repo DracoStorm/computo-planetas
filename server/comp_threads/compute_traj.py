@@ -9,18 +9,9 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
     coordinates: str
     while True:
         try:
-            while True:
-                data: bytes = client_socket.recv(1024)
-                if not data:
-                    break
-                elif data.startswith(ERR_IDENTIFIER):
-                    raise 'Component Error'
-                elif data.startswith(FILE_IDENTIFIER):
-                    raise 'Incorrect Data Type'
-                elif data.startswith(MSG_IDENTIFIER):
-                    coordinates = net.recive_message(data)
-                else:
-                    raise 'Unknown Data Type'
+
+            coordinates = net.receive_message(client_socket)
+
         except 'Component Error' as e:
             # actualizar UI
             net.send_shutdown()
@@ -43,16 +34,11 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
             print(f"Error during data transfer: {e}")
             raise
         else:
-            barrier.wait()
+            print(coordinates)
+            # barrier.wait()
 
-        if (lock.acquire(coords)):
-            coords = coordinates
-            lock.release()
-
-        else:
-            net.send_shutdown()
-            raise 'Can\'t adquire the lock'
-        barrier.wait()
+        coords = coordinates
+        net.send_ok(client_socket)
 
 
 if __name__ == "__main__":
