@@ -19,6 +19,8 @@ def gen_frame(background: Image.Image, planet_1: Image.Image) -> Image.Image:
     # Superpone la imagen sobre la imagen principal
     imagen_resultante = background.copy()
     imagen_resultante.paste(planet_1, (px, py), planet_1)
+    
+    return imagen_resultante  # Devuelve la imagen resultante
 
 
 def generar_imagenes_superpuestas(num_imagenes=5000):

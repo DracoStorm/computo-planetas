@@ -2,6 +2,10 @@ import cv2
 from frames import generar_imagenes_superpuestas  # Importa la función desde el módulo
 
 def generar_video_salida(nombre_video_salida, imagenes_superpuestas, fps=5):
+    if not imagenes_superpuestas:
+        print("No se generaron imágenes superpuestas.")
+        return
+
     # Primero, establece las dimensiones del video según las dimensiones de la primera imagen
     alto, ancho, _ = imagenes_superpuestas[0].shape
     dimensiones_video = (ancho, alto)
