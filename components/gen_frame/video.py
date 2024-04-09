@@ -1,5 +1,30 @@
 import cv2
-from frames import generar_imagenes_superpuestas  # Importa la función desde el módulo
+from PIL import Image
+import numpy as np
+#from frames import gen_frame  # Importa la función desde el módulo
+
+def generar_imagenes_superpuestas(num_imagenes=5000):
+
+    imagen_principal = Image.open(r"components\gen_frame\Fondo.jpeg")
+
+    imagenes_superpuestas = []
+
+    # Itera sobre un rango de num_imagenes
+    for i in range(num_imagenes):
+        # Abre la imagen del frame actual
+        ruta_frame = fr"animation\frames\marte\frame_{i % 10}.png"
+        imagen_superpuesta = Image.open(ruta_frame)
+
+        res_img = gen_frame(imagen_principal, imagen_superpuesta)
+        # Convierte la imagen resultante a una matriz numpy y agrega a la lista
+        imagenes_superpuestas.append(np.array(res_img))
+
+        # Cierra la imagen del frame actual
+        imagen_superpuesta.close()
+
+    imagen_principal.close()
+
+    return imagenes_superpuestas
 
 def generar_video_salida(nombre_video_salida, imagenes_superpuestas, fps=5):
     if not imagenes_superpuestas:

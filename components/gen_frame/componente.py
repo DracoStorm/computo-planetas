@@ -1,0 +1,1 @@
+from .frames import generar_imagenes_superpuestas
