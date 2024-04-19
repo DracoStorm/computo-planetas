@@ -4,9 +4,9 @@ from .constants import *
 from .exceptions import *
 
 
-def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
+def receive_file(client_socket: socket) -> tuple[str, bytes]:
     data = client_socket.recv(1024)
-
+    print(data)
     if (data == ERR_IDENTIFIER):
         raise ComponentError
     if (data == SHUTDOWN_IDENTIFIER):
@@ -20,12 +20,13 @@ def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
 
     file_data = bytearray()
     while True:
-        data_chunk = client_socket.recv(1024)
-        if not data_chunk:
+        if len(file_data) == file_size:
             break
+        data_chunk = client_socket.recv(1024)
         file_data.extend(data_chunk)
-
-    return file_name, file_size, bytes(file_data)
+    
+    file_data = bytes(file_data)
+    return file_name, file_data
 
 
 def receive_message(client_socket: socket) -> str:
