@@ -1,34 +1,56 @@
 import socket
-import network.constants as const
+from threading import Barrier, Lock
+from network.constants import *
+from network.exceptions import *
 import network.functions as net
+from PIL import Image
 
 
-def main() -> None:
-    # Dirección IP y puerto del servidor
-    # Cambiar a la dirección IP real del servidor
-    server_address = (const.SERVER_IP, const.SERVER_PORT)
+def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock, iterations: int) -> None:
 
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # client_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    coordinates: str
+    for _ in range(iterations):
+        imagen_enviada = Image.open(r'components\gen_frame\fondo.jpg')
+        try:
+            coordinates = net.send_file(
+                client_socket, "components/gen_frame/fondo.jpg", imagen_enviada.tobytes())
+            print(coordinates)
 
-    # Conectar al servidor
-    client_socket.connect(server_address)
-    while True:
-        # Opción para enviar mensaje o archivo
-        option = input(
-            "Seleccione una opción (1 para enviar mensaje, 2 para enviar archivo, q para salir): ")
-
-        if option == '1':
-            net.send_message(client_socket)
-        elif option == '2':
-            # Ruta del archivo que deseas enviar
-            file_path = input("Ingrese la ruta del archivo que desea enviar: ")
-            net.send_file(client_socket, file_path)
-        elif option.lower() == 'q':
-            print("Saliendo del programa.")
-            break
+        except ComponentError:
+            print('ComponentError')
+            # actualizar UI
+            client_socket.close()
+            barrier.abort()
+        except BadNetType:
+            # actualizar UI
+            net.send_shutdown(client_socket)
+            client_socket.close()
+            barrier.abort()
+        except Exception as e:
+            # actualizar ui
+            net.send_shutdown(client_socket)
+            client_socket.close()
+            print(f"Error during data transfer: {e}")
+            raise
         else:
-            print("Opción no válida.")
+            print(f'Step: {_} current {coordinates=}')
+            print("no recibi el mensaje")
+            recivir_msg = net.receive_message(client_socket)
+            print("recibi msg")
+
+        # barrier.wait()
+
+        # coords = coordinates
+        # barrier.wait()
+        print(recivir_msg)
+        print("recibi mensaje")
+        if _ + 1 == iterations:
+            break
+        net.send_ok(client_socket)
+
+    net.send_shutdown(client_socket)
+    client_socket.close()
+    print('Component: Compute_trajectory :: finalized succesfully')
 
 
 if __name__ == "__main__":

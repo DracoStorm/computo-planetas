@@ -7,16 +7,24 @@ from .exceptions import *
 def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
     data = client_socket.recv(1024)
 
+    print(data)
+
     if (data == ERR_IDENTIFIER):
+        print(data)
         raise ComponentError
     if (data == SHUTDOWN_IDENTIFIER):
+        print(data)
         raise UnexpectedShutdown
     if (data.startswith(MSG_IDENTIFIER)):
+        print(data)
         raise BadNetType
 
     file_info = data[len(FILE_IDENTIFIER):].decode(errors='replace').split('@')
+    print(file_info)
     file_name = file_info[0]
+    print(file_name)
     file_size = int(file_info[1])
+    print(file_size)
 
     file_data = bytearray()
     while True:
@@ -54,7 +62,8 @@ def recieve_status(client_socket: socket) -> bytes:
 
 
 def send_file(client_socket: socket, file_name: str, file: bytes) -> None:
-    client_socket.sendall(FILE_IDENTIFIER+file_name.encode()+len(file))
+    info = file_name+'@'+str(len(file))
+    client_socket.sendall(FILE_IDENTIFIER+info.encode())
     client_socket.sendall(file)
 
 
