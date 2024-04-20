@@ -4,11 +4,15 @@ from .constants import *
 from .exceptions import *
 
 
-def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
+def receive_file(client_socket: socket) -> tuple[str, bytes]:
     data = client_socket.recv(1024)
+<<<<<<< HEAD
 
     print(data)
 
+=======
+    print(data)
+>>>>>>> a881d5cb47f662c71ad778be46e76ca033df3eaa
     if (data == ERR_IDENTIFIER):
         print(data)
         raise ComponentError
@@ -28,12 +32,13 @@ def receive_file(client_socket: socket) -> tuple[str, int, bytes]:
 
     file_data = bytearray()
     while True:
-        data_chunk = client_socket.recv(1024)
-        if not data_chunk:
+        if len(file_data) == file_size:
             break
+        data_chunk = client_socket.recv(1024)
         file_data.extend(data_chunk)
-
-    return file_name, file_size, bytes(file_data)
+    
+    file_data = bytes(file_data)
+    return file_name, file_data
 
 
 def receive_message(client_socket: socket) -> str:
