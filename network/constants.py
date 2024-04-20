@@ -6,13 +6,20 @@ SHUTDOWN_IDENTIFIER = b'STDN'
 OK_IDENTIFIER = b'OK'
 
 # Lista de ips según los componentes
+IP_COMPUTE_TRJ = '192.168.100.61'
+IP_PLANET_FRAME = '0.0.0.0'
+IP_GEN_FRAME = '192.168.100.61'
+IP_ANTIALIASING = '0.0.0.0'
+IP_GEN_VIDEO = '0.0.0.0'
+
 IPS = [
-    '192.168.100.61',
-    '172.26.167.179',  # ip-Toño
-    '172.31.6.164',  # ip-Draco
-    '172.31.12.11'  # ip-Draco1
+    IP_COMPUTE_TRJ,
+    IP_PLANET_FRAME,
+    IP_GEN_FRAME,
+    IP_ANTIALIASING,
+    IP_GEN_VIDEO
 ]
 
 # Definir el servidor y el puerto
-SERVER_IP = '172.26.160.67'
+SERVER_IP = ' 192.168.100.21'
 SERVER_PORT = 22333

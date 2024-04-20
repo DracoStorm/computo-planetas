@@ -30,18 +30,15 @@ def main() -> None:
                     f"Intento de conexión desde una dirección IP no permitida: {client_address[0]}")
                 break
 
-            if client_address[0] == IPS[0]:
+            if client_address[0] == IP_COMPUTE_TRJ:
                 comp_compute_traj = threading.Thread(
                     target=compute_thread.main, name='component compute trajectory', args=(client_socket, barrier, coords, lock, iterations))
                 comp_compute_traj.start()
-            if client_address[0] == IPS[1]:
-                comp_compute_traj = threading.Thread(
+            # thread of planet_frame
+            if client_address[0] == IP_GEN_FRAME:
+                comp_gen_frame = threading.Thread(
                     target=frames_thread.handle_client, name='component frames', args=(client_socket,))
-                comp_compute_traj.start()
-            # if client_address[0] == const.IPS[0]:
-            #     comp_compute_traj = threading.Thread(
-            #         target=genframe_thread.handle_client, name='component generate frame', args=(client_socket,))
-            #     comp_compute_traj.start()
+                comp_gen_frame.start()
 
     except KeyboardInterrupt:
         print("Servidor cerrado manualmente.")
