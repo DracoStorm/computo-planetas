@@ -8,7 +8,7 @@ OK_IDENTIFIER = b'OK'
 # Lista de ips según los componentes
 IP_COMPUTE_TRJ = '192.168.100.61'
 IP_PLANET_FRAME = '0.0.0.0'
-IP_GEN_FRAME = '192.168.100.61'
+IP_GEN_FRAME = '192.168.100.72'
 IP_ANTIALIASING = '0.0.0.0'
 IP_GEN_VIDEO = '0.0.0.0'
 
@@ -21,5 +21,5 @@ IPS = [
 ]
 
 # Definir el servidor y el puerto
-SERVER_IP = ' 192.168.100.21'
+SERVER_IP = '192.168.100.21'
 SERVER_PORT = 22333
