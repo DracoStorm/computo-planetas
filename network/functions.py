@@ -36,7 +36,7 @@ def receive_file(client_socket: socket) -> tuple[str, bytes]:
             break
         data_chunk = client_socket.recv(1024)
         file_data.extend(data_chunk)
-    
+
     file_data = bytes(file_data)
     return file_name, file_data
 
