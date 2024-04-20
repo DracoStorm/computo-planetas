@@ -6,29 +6,16 @@ from .exceptions import *
 
 def receive_file(client_socket: socket) -> tuple[str, bytes]:
     data = client_socket.recv(1024)
-<<<<<<< HEAD
-
-    print(data)
-
-=======
-    print(data)
->>>>>>> a881d5cb47f662c71ad778be46e76ca033df3eaa
     if (data == ERR_IDENTIFIER):
-        print(data)
         raise ComponentError
     if (data == SHUTDOWN_IDENTIFIER):
-        print(data)
         raise UnexpectedShutdown
     if (data.startswith(MSG_IDENTIFIER)):
-        print(data)
         raise BadNetType
 
     file_info = data[len(FILE_IDENTIFIER):].decode(errors='replace').split('@')
-    print(file_info)
     file_name = file_info[0]
-    print(file_name)
     file_size = int(file_info[1])
-    print(file_size)
 
     file_data = bytearray()
     while True:
