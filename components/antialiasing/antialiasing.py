@@ -1,61 +1,66 @@
+#servidor de antialising 
+import socket
 from PIL import Image, ImageFilter
+from io import BytesIO
 
 
-def cargar_imagen(ruta: str) -> Image:
-    """
-    Carga una imagen desde la ruta especificada.
-
-    Args:
-    - ruta (str): Ruta de la imagen a cargar.
-
-    Returns:
-    - Image: Objeto de imagen PIL.
-    """
-    imagen = Image.open(ruta)
+def cargar_imagen_desde_bytes(data_bytes):
+    # Convierte los bytes recibidos en una imagen PIL
+    imagen = Image.open(BytesIO(data_bytes))
     return imagen
 
 
-def aplicar_antialiasing(imagen: Image, radio: int = 2) -> Image:
-    """
-    Aplica antialiasing a la imagen utilizando un filtro gaussiano.
-
-    Args:
-    - imagen (Image): Objeto de imagen PIL.
-    - radio (int): Radio del filtro gaussiano. Valor por defecto: 2.
-
-    Returns:
-    - Image: Imagen suavizada.
-    """
+def aplicar_antialiasing(imagen, radio=2):
+    # Aplica antialiasing a la imagen utilizando un filtro gaussiano
     imagen_suavizada = imagen.filter(ImageFilter.GaussianBlur(radius=radio))
     return imagen_suavizada
 
 
-def guardar_imagen(imagen: Image, nombre: str):
-    """
-    Guarda la imagen en disco con el nombre especificado.
-
-    Args:
-    - imagen (Image): Objeto de imagen PIL.
-    - nombre (str): Nombre de archivo para guardar la imagen.
-    """
-    imagen.save(nombre)
-    print(f"Imagen guardada como {nombre}")
+def procesar_imagen(data_bytes):
+    # Carga la imagen desde los bytes recibidos
+    imagen_original = cargar_imagen_desde_bytes(data_bytes)
+    
+    # Aplica el efecto antialiasing a la imagen
+    imagen_suavizada = aplicar_antialiasing(imagen_original)
+    
+    # Convierte la imagen suavizada a bytes
+    buffer = BytesIO()
+    imagen_suavizada.save(buffer, format="JPEG")
+    imagen_suavizada_bytes = buffer.getvalue()
+    
+    return imagen_suavizada_bytes
 
 
 def main():
-    # Ruta de la imagen que deseas suavizar
-    # Cambia esto a la ruta de tu imagen
-    ruta_imagen = "components/antialiasing/zelda.jpg"
-
-    # Cargar la imagen
-    imagen_original = cargar_imagen(ruta_imagen)
-
-    # Aplicar antialiasing a la imagen
-    imagen_suavizada = aplicar_antialiasing(imagen_original)
-
-    # Guardar la imagen suavizada
-    nombre_imagen_suavizada = "mi_imagen_suavizada.jpg"
-    guardar_imagen(imagen_suavizada, nombre_imagen_suavizada)
+    # Configuración del servidor
+    host = '127.0.0.1'
+    puerto = 12345
+    
+    # Crear el socket del servidor
+    servidor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    servidor_socket.bind((host, puerto))
+    servidor_socket.listen(1)
+    
+    print("Servidor escuchando en el puerto", puerto)
+    
+    while True:
+        # Aceptar conexiones entrantes
+        cliente_socket, direccion = servidor_socket.accept()
+        print("Conexión establecida desde", direccion)
+        
+        # Recibir datos del cliente (imagen en bytes)
+        data_bytes = cliente_socket.recv(4096)
+        print("Imagen recibida desde el cliente")
+        
+        # Procesar la imagen
+        imagen_procesada_bytes = procesar_imagen(data_bytes)
+        
+        # Enviar la imagen procesada de vuelta al cliente
+        cliente_socket.send(imagen_procesada_bytes)
+        print("Imagen procesada enviada al cliente")
+        
+        # Cerrar la conexión con el cliente
+        cliente_socket.close()
 
 
 if __name__ == "__main__":
