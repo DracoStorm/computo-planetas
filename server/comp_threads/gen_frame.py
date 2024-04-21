@@ -31,7 +31,7 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
             print(f"Error during data transfer: {e}")
             raise
         else:
-            if net.receive_status(client_socket) == OK_IDENTIFIER:
+            if net.recieve_status(client_socket) == OK_IDENTIFIER:
                 print(f'Step: {_} current image succesfully send')
             else:
                 raise ComponentError
