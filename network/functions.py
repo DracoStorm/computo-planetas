@@ -13,10 +13,10 @@ def receive_file(client_socket: socket) -> tuple[str, bytes]:
     if (data.startswith(MSG_IDENTIFIER)):
         raise BadNetType
 
-    eom = data.find(b'EOM')
-    file_info = data[len(FILE_IDENTIFIER):eom].decode(
+    sof = data.find(START_OF_FILE)
+    file_info = data[len(FILE_IDENTIFIER):sof].decode(
         errors='replace').split('@')
-    file_data = data[eom+len(b'EOM'):]
+    file_data = data[sof+len(START_OF_FILE):]
     print(file_info)
     file_name = file_info[0]
     file_size = int(file_info[1])
@@ -54,8 +54,8 @@ def recieve_status(client_socket: socket) -> bytes:
 
 
 def send_file(client_socket: socket, file_name: str, file: bytes) -> None:
-    info = file_name+'@'+str(len(file))+'EOM'
-    client_socket.sendall(FILE_IDENTIFIER+info.encode())
+    info = file_name+'@'+str(len(file))
+    client_socket.sendall(FILE_IDENTIFIER+info.encode()+START_OF_FILE)
     client_socket.sendall(file)
 
 
