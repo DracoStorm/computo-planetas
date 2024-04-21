@@ -22,7 +22,6 @@ def receive_file(client_socket: socket) -> tuple[str, bytes]:
     file_data = data[sof+len(START_OF_FILE):]
 
     while len(file_data) != file_size:
-        print(f'{len(file_data)}/{file_size}')
         file_data += client_socket.recv(4094)
 
     return file_name, file_data
