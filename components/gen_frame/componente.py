@@ -14,12 +14,12 @@ def main():
     print(f'Conected to server hosted in {SERVER_IP} using {SERVER_PORT} port')
 
     # Obtiene las condiciones iniciales
-    #X, m1, m2 = astro_init.init()
+    # X, m1, m2 = astro_init.init()
 
     while True:
-        
+
         try:
-            #print ('Funciona')
+            # print ('Funciona')
             name, imagen = net.receive_file(client_socket)
             print(name)
         except ComponentError:
@@ -46,7 +46,7 @@ def main():
                 raise
         try:
             status = net.recieve_status(client_socket)
-            #print(status)
+            # print(status)
         except Exception as e:
             # actualizar gui
             net.send_error(client_socket)
