@@ -2,7 +2,7 @@ import socket
 import threading
 from network.constants import *
 from comp_threads import compute_traj as compute_thread
-from comp_threads import frames as frames_thread
+from comp_threads import gen_frame as frames_thread
 
 
 def main() -> None:
@@ -37,7 +37,7 @@ def main() -> None:
             # thread of planet_frame
             if client_address[0] == IP_GEN_FRAME:
                 comp_gen_frame = threading.Thread(
-                    target=frames_thread.handle_client, name='component frames', args=(client_socket,))
+                    target=frames_thread.main, name='component frames', args=(client_socket, barrier, coords, lock, iterations))
                 comp_gen_frame.start()
 
     except KeyboardInterrupt:

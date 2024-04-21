@@ -54,7 +54,7 @@ def recieve_status(client_socket: socket) -> bytes:
 
 
 def send_file(client_socket: socket, file_name: str, file: bytes) -> None:
-    info = file_name+'@'+str(len(file))
+    info = file_name+'@'+str(len(file))+'EOM'
     client_socket.sendall(FILE_IDENTIFIER+info.encode())
     client_socket.sendall(file)
 

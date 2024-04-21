@@ -10,11 +10,10 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
 
     coordinates: str
     for _ in range(iterations):
-        imagen_enviada = Image.open(r'components\gen_frame\fondo.jpg')
+        imagen_enviada = Image.open(r'components/gen_frame/fondo.jpg')
         try:
-            coordinates = net.send_file(
+            net.send_file(
                 client_socket, "components/gen_frame/fondo.jpg", imagen_enviada.tobytes())
-            print(coordinates)
 
         except ComponentError:
             print('ComponentError')
@@ -33,17 +32,13 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
             print(f"Error during data transfer: {e}")
             raise
         else:
-            print(f'Step: {_} current {coordinates=}')
-            print("no recibi el mensaje")
-            recivir_msg = net.receive_message(client_socket)
-            print("recibi msg")
+            print(f'Step: {_} current')
+            print(net.receive_message(client_socket))
 
         # barrier.wait()
 
         # coords = coordinates
         # barrier.wait()
-        print(recivir_msg)
-        print("recibi mensaje")
         if _ + 1 == iterations:
             break
         net.send_ok(client_socket)
