@@ -12,8 +12,7 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
     for _ in range(iterations):
         imagen_enviada = Image.open(r'components/gen_frame/fondo.jpg')
         try:
-            net.send_file(
-                client_socket, "components/gen_frame/fondo.jpg", imagen_enviada.tobytes())
+            net.send_file(client_socket, "fondo.jpg", imagen_enviada.tobytes())
 
         except ComponentError:
             print('ComponentError')
@@ -32,8 +31,10 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
             print(f"Error during data transfer: {e}")
             raise
         else:
-            print(f'Step: {_} current')
-            print(net.receive_message(client_socket))
+            if net.receive_status(client_socket) == OK_IDENTIFIER:
+                print(f'Step: {_} current image succesfully send')
+            else:
+                raise ComponentError
 
         # barrier.wait()
 
@@ -45,7 +46,7 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
 
     net.send_shutdown(client_socket)
     client_socket.close()
-    print('Component: Compute_trajectory :: finalized succesfully')
+    print('Component: Genenerate_frames :: finalized succesfully')
 
 
 if __name__ == "__main__":

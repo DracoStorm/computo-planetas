@@ -36,9 +36,7 @@ def main():
             raise
         else:
             try:
-                print('no se envio mensaje')
-                net.send_message(client_socket, 'Imagen recibida')
-                print('se envio mensaje')
+                net.send_ok(client_socket)
             except Exception as e:
                 # actualizar gui
                 net.send_error(client_socket)
