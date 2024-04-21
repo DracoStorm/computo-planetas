@@ -16,10 +16,10 @@ def receive_file(client_socket: socket) -> tuple[str, bytes]:
     sof = data.find(START_OF_FILE)
     file_info = data[len(FILE_IDENTIFIER):sof].decode(
         errors='replace').split('@')
-    file_data = data[sof+len(START_OF_FILE):]
-    print(file_info)
     file_name = file_info[0]
     file_size = int(file_info[1])
+
+    file_data = data[sof+len(START_OF_FILE):]
 
     while len(file_data) != file_size:
         print(f'{len(file_data)}/{file_size}')
