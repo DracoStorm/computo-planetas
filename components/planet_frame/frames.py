@@ -3,8 +3,8 @@ from PIL import Image, ImageSequence, ImageDraw
 
 
 # Ruta de la carpeta gif y fotogramas desde la raiz
-PATH_GIF = r"animation/gifs/"
-PATH_FRAMES = r"animation/frames/"
+PATH_GIF = r"planet_frame\\gifs"
+PATH_FRAMES = r"planet_frame\\gifs\\frames"
 
 
 def unmount_gif(file: str) -> str:
@@ -48,16 +48,16 @@ def unmount_gif(file: str) -> str:
     return PATH_FRAMES_FILE
 
 
-def re_scale(file: str, new_size: tuple[int, int]) -> Image:
+def re_scale(file: str, new_size: tuple[int, int]) -> Image: # type: ignore
     # Iterar sobre cada file en la carpeta
     # Abrir la frame
     frame = Image.open(PATH_FRAMES+file)
 
     # Rescalar la frame
-    return frame.resize(new_size)
+    return frame.resize(new_size) # type: ignore
 
 
-def cut_elipse(file: Image) -> Image:
+def cut_elipse(file: Image) -> Image: # type: ignore
     file.convert('RGBA')
     # Coordenadas del elipse (ajústalas según tus necesidades)
     # elipse_coords = (16, 4, 235, 220)  # (x0, y0, x1, y1) Mercurio
