@@ -45,3 +45,4 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
 
 if __name__ == "__main__":
     main()
+#agregar comentarios 
