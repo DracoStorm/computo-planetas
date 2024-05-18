@@ -3,6 +3,7 @@ import threading
 from network.constants import *
 from comp_threads import compute_traj as compute_thread
 from comp_threads import gen_frame as frames_thread
+from comp_threads import componenteanti as anti_thread
 
 
 def main() -> None:
@@ -39,6 +40,11 @@ def main() -> None:
                 comp_gen_frame = threading.Thread(
                     target=frames_thread.main, name='component frames', args=(client_socket, barrier, coords, lock, iterations))
                 comp_gen_frame.start()
+
+            if client_address[0] == IP_ANTIALIASING:
+                anti = threading.Thread(
+                    target= anti_thread.main, name='component anitalising', args=(client_socket, barrier, coords, lock, iterations))
+                anti.start()
 
     except KeyboardInterrupt:
         print("Servidor cerrado manualmente.")
