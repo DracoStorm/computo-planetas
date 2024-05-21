@@ -15,38 +15,45 @@ def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock
             net.send_file(client_socket, "fondo.jpg", imagen_enviada.tobytes())
 
         except ComponentError:
-            print('ComponentError')
-            # actualizar UI
+            print('Error en el componente')
+            # Actualizar la interfaz de usuario
             client_socket.close()
             barrier.abort()
         except BadNetType:
-            # actualizar UI
+            # Actualizar la interfaz de usuario
             net.send_shutdown(client_socket)
             client_socket.close()
             barrier.abort()
         except Exception as e:
-            # actualizar ui
+            # Actualizar la interfaz de usuario
             net.send_shutdown(client_socket)
             client_socket.close()
-            print(f"Error during data transfer: {e}")
+            print(f"Error durante la transferencia de datos: {e}")
             raise
         else:
-            if net.recieve_status(client_socket) == OK_IDENTIFIER:
-                print(f'Step: {_} current image succesfully send')
+            if net.receive_status(client_socket) == OK_IDENTIFIER:
+                print(f'Paso: {_} imagen enviada con éxito')
             else:
                 raise ComponentError
 
-        # barrier.wait()
+        try:
+            # Recibir coordenadas del componente compute_traj
+            coordinates = net.receive_message(client_socket)
+            coords = coordinates
+            print(f'Coordenadas recibidas: {coords}')
+        except Exception as e:
+            net.send_shutdown(client_socket)
+            client_socket.close()
+            print(f"Error al recibir coordenadas: {e}")
+            raise
 
-        # coords = coordinates
-        # barrier.wait()
         if _ + 1 == iterations:
             break
         net.send_ok(client_socket)
 
     net.send_shutdown(client_socket)
     client_socket.close()
-    print('Component: Genenerate_frames :: finalized succesfully')
+    print('Componente: Generate_frames :: finalizado con éxito')
 
 
 if __name__ == "__main__":
