@@ -1,5 +1,9 @@
 #componente prueba 1 de antialising cliente 
 import socket
+from threading import Barrier, Lock
+from network.constants import *
+from network.exceptions import *
+import network.functions as net
 from PIL import Image
 from io import BytesIO
 
@@ -13,18 +17,16 @@ def cargar_imagen(ruta):
 def convertir_imagen_a_bytes(imagen):
     # Convierte la imagen en bytes para enviarla a través del socket
     buffer = BytesIO()
-    imagen.save(buffer, format="JPEG")
+    imagen.save(buffer, format="PNG")  # Guardar como PNG en lugar de JPEG
     imagen_bytes = buffer.getvalue()
     return imagen_bytes
 
 
-def main():
+def main(client_socket: socket.socket, barrier: Barrier, coords: str, lock: Lock, iterations: int):
     # Configuración del servidor
-    host = '127.0.0.1'
-    puerto = 12345
     
     # Ruta de la imagen que deseas enviar al servidor
-    ruta_imagen = "mi_imagen.jpg"
+    ruta_imagen = "C:/Users/alfre/OneDrive/Imágenes/Saved Pictures/logobuap.png"
     
     # Cargar la imagen
     imagen_original = cargar_imagen(ruta_imagen)
@@ -32,15 +34,12 @@ def main():
     # Convertir la imagen a bytes
     imagen_bytes = convertir_imagen_a_bytes(imagen_original)
     
-    # Crear el socket del cliente
-    cliente_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     
     try:
-        # Conectar al servidor
-        cliente_socket.connect((host, puerto))
         
         # Enviar la imagen al servidor
-        cliente_socket.send(imagen_bytes)
+        net.send_file(client_socket,"fondo",imagen_bytes)
         print("Imagen enviada al servidor")
         
         # Recibir la imagen procesada del servidor
